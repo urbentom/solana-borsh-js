@@ -1,5 +1,6 @@
 import { ArrayType, DecodeTypes, MapType, IntegerType, OptionType, Schema, SetType, StructType, integers, EnumType } from './types.js';
 import { DecodeBuffer } from './buffer.js';
+import { PublicKey } from '@solana/web3.js';
 
 export class BorshDeserializer {
     buffer: DecodeBuffer;
@@ -16,6 +17,7 @@ export class BorshDeserializer {
         if (typeof schema === 'string') {
             if (integers.includes(schema)) return this.decode_integer(schema);
             if (schema === 'string') return this.decode_string();
+            if (schema === 'publicKey') return this.decode_publicKey();
             if (schema === 'bool') return this.decode_boolean();
         }
 
@@ -78,6 +80,11 @@ export class BorshDeserializer {
 
     decode_boolean(): boolean {
         return this.buffer.consume_value('u8') > 0;
+    }
+
+    decode_publicKey(): PublicKey {
+        const buffer = new Uint8Array(this.buffer.consume_bytes(32));
+        return new PublicKey(buffer);
     }
 
     decode_option(schema: OptionType): DecodeTypes {

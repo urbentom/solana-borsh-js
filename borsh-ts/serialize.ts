@@ -1,6 +1,7 @@
 import { ArrayType, MapType, IntegerType, OptionType, Schema, SetType, StructType, integers, EnumType } from './types.js';
 import { EncodeBuffer } from './buffer.js';
 import * as utils from './utils.js';
+import { PublicKey } from '@solana/web3.js';
 
 export class BorshSerializer {
     encoded: EncodeBuffer;
@@ -23,6 +24,7 @@ export class BorshSerializer {
             if (integers.includes(schema)) return this.encode_integer(value, schema);
             if (schema === 'string') return this.encode_string(value);
             if (schema === 'bool') return this.encode_boolean(value);
+            if (schema === 'publicKey') return this.encode_publicKey(value);
         }
 
         if (typeof schema === 'object') {
@@ -57,6 +59,12 @@ export class BorshSerializer {
         }
 
         this.encoded.store_bytes(new Uint8Array(buffer));
+    }
+
+    encode_publicKey(value: unknown | PublicKey): void {
+        this.checkTypes && utils.expect_type(value, 'string', this.fieldPath);
+        const _value = new PublicKey(value);
+        this.encoded.store_bytes(_value.toBytes());
     }
 
     encode_string(value: unknown): void {
