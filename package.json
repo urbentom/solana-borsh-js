@@ -1,6 +1,6 @@
 {
-  "name": "borsh",
-  "version": "2.0.0",
+  "name": "solana-borsh",
+  "version": "2.0.1",
   "description": "Binary Object Representation Serializer for Hashing",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/near/borsh-js.git"
+    "url": "git+https://github.com/urbentom/solana-borsh-js.git"
   },
   "keywords": [
     "serializer",
@@ -39,21 +39,24 @@
     "consistency",
     "deterministic"
   ],
-  "author": "Near Inc",
+  "author": "torquetom",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/near/borsh-js/issues"
+    "url": "https://github.com/urbentom/solana-borsh-js/issues"
   },
-  "homepage": "https://github.com/near/borsh-js#readme",
+  "homepage": "https://github.com/urbentom/solana-borsh-js#readme",
   "devDependencies": {
     "@types/babel__core": "^7.1.2",
     "@types/babel__template": "^7.0.2",
     "@types/node": "^12.7.3",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
+    "bn.js": "^5.2.0",
     "eslint": "^8.17.0",
     "jest": "^26.0.1",
-    "typescript": "^4",
-    "bn.js": "^5.2.0"
+    "typescript": "^4"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.2"
   }
 }

@@ -1,6 +1,7 @@
 const borsh = require('../../lib/cjs/index');
 const testStructures = require('./structures');
 const BN = require('bn.js');
+const { PublicKey } = require('@solana/web3.js');
 
 function check_encode(value, schema, expected) {
     const encoded = borsh.serialize(schema, value);
@@ -12,6 +13,7 @@ function check_decode(expected, schema, encoded) {
     // console.log(decoded, expected); // visual inspection
     if (expected instanceof BN) return expect(BigInt(expected) === decoded).toBe(true);
     if (schema === 'f32') return expect(decoded).toBeCloseTo(expected);
+    if (schema === 'publicKey') return expect(decoded.toBase58()).toEqual(expected);
     expect(decoded).toEqual(expected);
 }
 
@@ -44,6 +46,14 @@ test('serialize strings', async () => {
     check_roundtrip('!ǬЇЉي࠺👍ઠ൧࿄ሒᘻᏠᬅᡝ࠻', 'string', [43, 0, 0, 0, 33, 199, 172, 208, 135, 208, 137, 217, 138, 224, 160, 186, 240, 159, 145, 141, 224, 170, 160, 224, 181, 167, 224, 191, 132, 225, 136, 146, 225, 152, 187, 225, 143, 160, 225, 172, 133, 225, 161, 157, 224, 160, 187]);
     check_roundtrip('óñ@‡؏ث 漢࠶⭐🔒􀀀', 'string', [30, 0, 0, 0, 195, 179, 195, 177, 64, 226, 128, 161, 216, 143, 216, 171, 32, 230, 188, 162, 224, 160, 182, 226, 173, 144, 240, 159, 148, 146, 244, 128, 128, 128]);
     check_roundtrip('f © bar 𝌆 baz ☃ qux', 'string', [25, 0, 0, 0, 102, 32, 194, 169, 32, 98, 97, 114, 32, 240, 157, 140, 134, 32, 98, 97, 122, 32, 226, 152, 131, 32, 113, 117, 120]);
+});
+
+test('serialize public keys', async () => {
+    check_roundtrip('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9', 'publicKey', new PublicKey('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9').toBuffer());
+    check_roundtrip('YvWXoyyRpD5fPVZHZV6SY8NS1nuTFmyewxudD3mwuE3', 'publicKey', new PublicKey('YvWXoyyRpD5fPVZHZV6SY8NS1nuTFmyewxudD3mwuE3').toBuffer());
+    // Check it still works with bytes
+    check_roundtrip('Cy1GS2FqefgaMbi45UunrUzin1rfEmTUYnomddzBpump', 'publicKey', new PublicKey('Cy1GS2FqefgaMbi45UunrUzin1rfEmTUYnomddzBpump').toBytes());
+    check_roundtrip('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P', 'publicKey', new PublicKey('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P').toBytes());
 });
 
 test('serialize floats', async () => {

@@ -2,19 +2,15 @@
 
 [![Project license](https://img.shields.io/badge/license-Apache2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Project license](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Discord](https://img.shields.io/discord/490367152054992913?label=discord)](https://discord.gg/Vyp7ETM)
-[![Travis status](https://travis-ci.com/near/borsh.svg?branch=master)](https://travis-ci.com/near/borsh-js)
 [![NPM version](https://img.shields.io/npm/v/borsh.svg?style=flat-square)](https://npmjs.com/borsh)
-[![Size on NPM](https://img.shields.io/bundlephobia/minzip/borsh.svg?style=flat-square)](https://npmjs.com/borsh)
+<!-- [![Size on NPM](https://img.shields.io/bundlephobia/minzip/borsh.svg?style=flat-square)](https://npmjs.com/borsh) -->
 
-**Borsh JS** is an implementation of the [Borsh] binary serialization format for
-JavaScript and TypeScript projects.
+**Solana Borsh JS** is an implementation of the [Borsh] binary serialization format for
+JavaScript and TypeScript projects with a focus of solana programs.
 
-Borsh stands for _Binary Object Representation Serializer for Hashing_. It is meant to be used in security-critical projects as it prioritizes consistency,
-safety, speed, and comes with a strict specification.
+Borsh stands for _Binary Object Representation Serializer for Hashing_. It is meant to be used in security-critical projects as it prioritizes consistency, safety, speed, and comes with a strict specification.
 
-> [!TIP]
-> We strongly recommend to use `borsh-js` alongside the amazing project [Borsher](https://github.com/nameskyteam/borsher), which we plan to merge in borsh.
+> This is a fork of [Near Borsh](https://github.com/near/borsh-js) with a few extras.
 
 ## Examples
 
@@ -51,10 +47,6 @@ validate the data and to determine the order of the fields in the serialized dat
 
 > You can find examples of valid in the [test](./borsh-ts/test/utils.test.js) folder.
 
-> [!TIP]
-> We strongly recommend to use `borsh-js` alongside the amazing project [Borsher](https://github.com/nameskyteam/borsher), which we plan to merge in borsh.
-
-
 ### Basic Types
 Basic types are described by a string. The following types are supported:
 - `u8`, `u16`, `u32`, `u64`, `u128` - unsigned integers of 8, 16, 32, 64, and 128 bits respectively.
@@ -62,6 +54,7 @@ Basic types are described by a string. The following types are supported:
 - `f32`, `f64` - IEEE 754 floating point numbers of 32 and 64 bits respectively.
 - `bool` - boolean value.
 - `string` - UTF-8 string.
+- `publickey` - Solana Publickey
 
 ### Arrays, Options, Maps, Sets, Enums, and Structs
 More complex objects are described by a JSON object. The following types are supported:
@@ -82,6 +75,7 @@ More complex objects are described by a JSON object. The following types are sup
 | `number`         | `f32` `f64`                       |
 | `boolean`        | `bool`                            |
 | `string`         | UTF-8 string                      |
+| `publickey`      | Web3JS PublicKey                  |
 | `type[]`         | fixed-size byte array             |
 | `type[]`         | dynamic sized array               |
 | `object`         | enum                              |

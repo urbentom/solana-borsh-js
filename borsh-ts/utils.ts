@@ -43,7 +43,7 @@ export function expect_enum(value: unknown, fieldPath: string[]): void {
 }
 
 // Validate Schema
-const VALID_STRING_TYPES = integers.concat(['bool', 'string']);
+const VALID_STRING_TYPES = integers.concat(['bool', 'string', 'publicKey']);
 const VALID_OBJECT_KEYS = ['option', 'enum', 'array', 'set', 'map', 'struct'];
 
 export class ErrorSchema extends Error {
