@@ -49,7 +49,8 @@ test('serialize strings', async () => {
 });
 
 test('serialize public keys', async () => {
-    check_roundtrip('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9', 'publicKey', [134, 160, 121, 213, 253, 244, 110, 246, 154, 143, 56, 208, 125, 25, 109, 252, 241, 107, 36, 154, 105, 154, 158, 182,  26,  88, 143, 254, 48, 197, 198, 6]);
+    check_roundtrip('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9', 'publicKey', new PublicKey('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9').toBuffer());
+    check_roundtrip('YvWXoyyRpD5fPVZHZV6SY8NS1nuTFmyewxudD3mwuE3', 'publicKey', new PublicKey('YvWXoyyRpD5fPVZHZV6SY8NS1nuTFmyewxudD3mwuE3').toBuffer());
 });
 
 test('serialize floats', async () => {
