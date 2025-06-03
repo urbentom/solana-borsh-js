@@ -51,6 +51,9 @@ test('serialize strings', async () => {
 test('serialize public keys', async () => {
     check_roundtrip('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9', 'publicKey', new PublicKey('A4XZKV1xpqtsvirDVAL2qbdQ7bKW6DXPkrUF8fRKtft9').toBuffer());
     check_roundtrip('YvWXoyyRpD5fPVZHZV6SY8NS1nuTFmyewxudD3mwuE3', 'publicKey', new PublicKey('YvWXoyyRpD5fPVZHZV6SY8NS1nuTFmyewxudD3mwuE3').toBuffer());
+    // Check it still works with bytes
+    check_roundtrip('Cy1GS2FqefgaMbi45UunrUzin1rfEmTUYnomddzBpump', 'publicKey', new PublicKey('Cy1GS2FqefgaMbi45UunrUzin1rfEmTUYnomddzBpump').toBytes());
+    check_roundtrip('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P', 'publicKey', new PublicKey('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P').toBytes());
 });
 
 test('serialize floats', async () => {
