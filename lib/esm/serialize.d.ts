@@ -11,6 +11,7 @@ export declare class BorshSerializer {
     encode_integer(value: unknown, schema: IntegerType): void;
     encode_bigint(value: bigint, size: number): void;
     encode_publicKey(value: unknown | PublicKey): void;
+    encode_bytes(value: unknown): void;
     encode_string(value: unknown): void;
     encode_boolean(value: unknown): void;
     encode_option(value: unknown, schema: OptionType): void;

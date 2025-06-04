@@ -25,6 +25,7 @@ export class BorshSerializer {
             if (schema === 'string') return this.encode_string(value);
             if (schema === 'bool') return this.encode_boolean(value);
             if (schema === 'publicKey') return this.encode_publicKey(value);
+            if (schema === 'bytes') return this.encode_bytes(value);
         }
 
         if (typeof schema === 'object') {
@@ -65,6 +66,18 @@ export class BorshSerializer {
         this.checkTypes && utils.expect_type(value, 'string', this.fieldPath);
         const _value = new PublicKey(value);
         this.encoded.store_bytes(_value.toBytes());
+    }
+
+    encode_bytes(value: unknown): void {
+        if (!(value instanceof Uint8Array) && !(Array.isArray(value))) {
+            throw new Error(`Expected Uint8Array or Array not ${typeof (value)}(${value}) at ${this.fieldPath.join('.')}`);
+        }
+
+        const _value = value instanceof Uint8Array ? value : new Uint8Array(value);
+
+        // 4 bytes for length + the bytes
+        this.encoded.store_value(_value.length, 'u32');
+        this.encoded.store_bytes(_value);
     }
 
     encode_string(value: unknown): void {

@@ -9,6 +9,7 @@ export declare class BorshDeserializer {
     decode_integer(schema: IntegerType): number | bigint;
     decode_bigint(size: number, signed?: boolean): bigint;
     decode_string(): string;
+    decode_bytes(): Uint8Array;
     decode_boolean(): boolean;
     decode_publicKey(): PublicKey;
     decode_option(schema: OptionType): DecodeTypes;

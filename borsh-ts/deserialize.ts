@@ -19,6 +19,7 @@ export class BorshDeserializer {
             if (schema === 'string') return this.decode_string();
             if (schema === 'publicKey') return this.decode_publicKey();
             if (schema === 'bool') return this.decode_boolean();
+            if (schema === 'bytes') return this.decode_bytes();
         }
 
         if (typeof schema === 'object') {
@@ -76,6 +77,13 @@ export class BorshDeserializer {
 
         // then decode code points to utf-8
         return String.fromCodePoint(...codePoints);
+    }
+
+    decode_bytes(): Uint8Array {
+        const len: number = this.decode_integer('u32') as number;
+        const buffer = new Uint8Array(this.buffer.consume_bytes(len));
+
+        return buffer;
     }
 
     decode_boolean(): boolean {
