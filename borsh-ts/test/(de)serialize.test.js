@@ -109,6 +109,11 @@ test('serialize sets', async () => {
     check_roundtrip(new Set([1, 2]), { set: 'u8' }, [2, 0, 0, 0, 1, 2]);
 });
 
+test('serialize vectors', async () => {
+    check_roundtrip([], { vec: 'u8' }, [0, 0, 0, 0]);
+    check_roundtrip([1, 2], { vec: 'u8' }, [2, 0, 0, 0, 1, 2]);
+});
+
 test('serialize struct', async () => {
     check_roundtrip(testStructures.Numbers, testStructures.schemaNumbers, testStructures.encodedNumbers);
     check_roundtrip(testStructures.Options, testStructures.schemaOptions, testStructures.encodedOptions);

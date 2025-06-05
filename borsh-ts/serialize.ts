@@ -1,4 +1,4 @@
-import { ArrayType, MapType, IntegerType, OptionType, Schema, SetType, StructType, integers, EnumType } from './types.js';
+import { ArrayType, MapType, IntegerType, OptionType, Schema, SetType, StructType, integers, EnumType, VecType } from './types.js';
 import { EncodeBuffer } from './buffer.js';
 import * as utils from './utils.js';
 import { PublicKey } from '@solana/web3.js';
@@ -32,6 +32,7 @@ export class BorshSerializer {
             if ('option' in schema) return this.encode_option(value, schema as OptionType);
             if ('enum' in schema) return this.encode_enum(value, schema as EnumType);
             if ('array' in schema) return this.encode_array(value, schema as ArrayType);
+            if ('vec' in schema) return this.encode_vec(value, schema as VecType);
             if ('set' in schema) return this.encode_set(value, schema as SetType);
             if ('map' in schema) return this.encode_map(value, schema as MapType);
             if ('struct' in schema) return this.encode_struct(value, schema as StructType);
@@ -146,6 +147,21 @@ export class BorshSerializer {
         if (utils.isArrayLike(value)) return this.encode_arraylike(value as ArrayLike<unknown>, schema);
         if (value instanceof ArrayBuffer) return this.encode_buffer(value, schema);
         throw new Error(`Expected Array-like not ${typeof (value)}(${value}) at ${this.fieldPath.join('.')}`);
+    }
+
+    encode_vec(value: unknown, schema: VecType): void {
+        if (!utils.isArrayLike(value)) {
+            throw new Error(`Expected Array-like not ${typeof (value)}(${value}) at ${this.fieldPath.join('.')}`);
+        }
+
+        const _value = value as Array<unknown>;
+        // 4 bytes for length
+        this.encoded.store_value(_value.length, 'u32');
+
+        // array values
+        for (let i = 0; i < _value.length; i++) {
+            this.encode_value(_value[i], schema.vec);
+        }
     }
 
     encode_arraylike(value: ArrayLike<unknown>, schema: ArrayType): void {

@@ -1,4 +1,4 @@
-import { ArrayType, DecodeTypes, MapType, IntegerType, OptionType, Schema, SetType, StructType, integers, EnumType } from './types.js';
+import { ArrayType, DecodeTypes, MapType, IntegerType, OptionType, Schema, SetType, StructType, integers, EnumType, VecType } from './types.js';
 import { DecodeBuffer } from './buffer.js';
 import { PublicKey } from '@solana/web3.js';
 
@@ -14,6 +14,7 @@ export class BorshDeserializer {
     }
 
     decode_value(schema: Schema): DecodeTypes {
+
         if (typeof schema === 'string') {
             if (integers.includes(schema)) return this.decode_integer(schema);
             if (schema === 'string') return this.decode_string();
@@ -29,6 +30,7 @@ export class BorshDeserializer {
             if ('set' in schema) return this.decode_set(schema as SetType);
             if ('map' in schema) return this.decode_map(schema as MapType);
             if ('struct' in schema) return this.decode_struct(schema as StructType);
+            if ('vec' in schema) return this.decode_vec(schema as VecType);
         }
 
         throw new Error(`Unsupported type: ${schema}`);
@@ -134,6 +136,15 @@ export class BorshDeserializer {
         const result = new Set<DecodeTypes>();
         for (let i = 0; i < len; ++i) {
             result.add(this.decode_value(schema.set));
+        }
+        return result;
+    }
+
+    decode_vec(schema: VecType): Array<DecodeTypes> {
+        const len = this.decode_integer('u32') as number;
+        const result = [];
+        for (let i = 0; i < len; ++i) {
+            result.push(this.decode_value(schema.vec));
         }
         return result;
     }
