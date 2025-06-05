@@ -43,8 +43,8 @@ export function expect_enum(value: unknown, fieldPath: string[]): void {
 }
 
 // Validate Schema
-const VALID_STRING_TYPES = integers.concat(['bool', 'string', 'publicKey']);
-const VALID_OBJECT_KEYS = ['option', 'enum', 'array', 'set', 'map', 'struct'];
+const VALID_STRING_TYPES = integers.concat(['bool', 'string', 'publicKey', 'bytes']);
+const VALID_OBJECT_KEYS = ['option', 'enum', 'array', 'set', 'map', 'struct', 'vec'];
 
 export class ErrorSchema extends Error {
     constructor(schema: Schema, expected: string) {
@@ -70,6 +70,7 @@ export function validate_schema(schema: Schema): void {
             if (key === 'set') return validate_schema(schema[key]);
             if (key === 'map') return validate_map_schema(schema[key]);
             if (key === 'struct') return validate_struct_schema(schema[key]);
+            if (key === 'vec') return validate_schema(schema[key]);
         }
     }
     throw new ErrorSchema(schema, VALID_OBJECT_KEYS.join(', ') + ' or ' + VALID_STRING_TYPES.join(', '));

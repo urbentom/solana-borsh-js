@@ -14,6 +14,13 @@ function check_decode(expected, schema, encoded) {
     if (expected instanceof BN) return expect(BigInt(expected) === decoded).toBe(true);
     if (schema === 'f32') return expect(decoded).toBeCloseTo(expected);
     if (schema === 'publicKey') return expect(decoded.toBase58()).toEqual(expected);
+    if (schema === 'bytes') {
+        expect(decoded.length).toEqual(expected.length);
+        for (let i = 0; i < decoded.length; i++) {
+            expect(decoded[i]).toEqual(expected[i]);
+        }
+        return;
+    }
     expect(decoded).toEqual(expected);
 }
 
@@ -56,6 +63,15 @@ test('serialize public keys', async () => {
     check_roundtrip('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P', 'publicKey', new PublicKey('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P').toBytes());
 });
 
+test('serialize bytes', async () => {
+
+    const byteData = [ 44, 0, 0, 0, 74, 57, 80, 84, 102, 101, 104, 118, 89, 102, 118, 86, 88, 120, 113, 80, 84, 85, 110, 70, 112, 49, 66, 70,  69,  81, 110,  84,  87, 99, 121, 109,  70, 84, 120,  90, 114,  99,  90, 103, 110,  72,  52,  87,  1, 0];
+    const decodedBytes = [50, 0, 0, 0, 44, 0, 0, 0, 74, 57, 80, 84, 102, 101, 104, 118, 89, 102, 118, 86, 88, 120, 113, 80, 84, 85, 110, 70, 112, 49, 66, 70, 69, 81, 110, 84, 87, 99, 121, 109, 70, 84, 120, 90, 114, 99, 90, 103, 110, 72, 52, 87, 1, 0];
+
+    check_roundtrip(byteData, 'bytes', decodedBytes);
+});
+
+
 test('serialize floats', async () => {
     check_roundtrip(7.23, 'f64', [236, 81, 184, 30, 133, 235, 28, 64]);
     check_roundtrip(7.23, 'f32', [41, 92, 231, 64]);
@@ -91,6 +107,11 @@ test('serialize maps', async () => {
 test('serialize sets', async () => {
     check_roundtrip(new Set(), { set: 'u8' }, [0, 0, 0, 0]);
     check_roundtrip(new Set([1, 2]), { set: 'u8' }, [2, 0, 0, 0, 1, 2]);
+});
+
+test('serialize vectors', async () => {
+    check_roundtrip([], { vec: 'u8' }, [0, 0, 0, 0]);
+    check_roundtrip([1, 2], { vec: 'u8' }, [2, 0, 0, 0, 1, 2]);
 });
 
 test('serialize struct', async () => {
