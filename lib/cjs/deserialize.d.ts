@@ -1,4 +1,4 @@
-import { ArrayType, DecodeTypes, MapType, IntegerType, OptionType, Schema, SetType, StructType, EnumType } from './types.js';
+import { ArrayType, DecodeTypes, MapType, IntegerType, OptionType, Schema, SetType, StructType, EnumType, VecType } from './types.js';
 import { DecodeBuffer } from './buffer.js';
 import { PublicKey } from '@solana/web3.js';
 export declare class BorshDeserializer {
@@ -16,6 +16,7 @@ export declare class BorshDeserializer {
     decode_enum(schema: EnumType): DecodeTypes;
     decode_array(schema: ArrayType): Array<DecodeTypes>;
     decode_set(schema: SetType): Set<DecodeTypes>;
+    decode_vec(schema: VecType): Array<DecodeTypes>;
     decode_map(schema: MapType): Map<DecodeTypes, DecodeTypes>;
     decode_struct(schema: StructType): object;
 }
